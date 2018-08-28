@@ -29,6 +29,8 @@ import com.google.android.gms.vision.face.FaceDetector;
 class Emojifier {
 
     private static final String LOG_TAG = Emojifier.class.getSimpleName();
+    private static final float START_RANGE = 0;
+    private static final float END_RANGE = 1;
 
     /**
      * Method for detecting faces in a bitmap.
@@ -58,11 +60,32 @@ class Emojifier {
             Toast.makeText(context, R.string.no_faces_message, Toast.LENGTH_SHORT).show();
         }
 
-        // TODO (2): Iterate through the faces, calling getClassifications() for each face.
+        // COMPLETED: Iterate through the faces, calling getClassifications() for each face.
+        for(int i = 0; i< faces.size(); i++) {
+            getClassifications(faces.get(i));
+        }
 
         // Release the detector
         detector.release();
     }
 
-    // TODO (1): Create a static method called getClassifications() which logs the probability of each eye being open and that the person is smiling.
+    private static boolean isInRange(float probability) {
+        return probability >= START_RANGE && probability <= END_RANGE;
+    }
+
+    // COMPLETED: Create a static method called getClassifications() which logs the probability of each eye being open and that the person is smiling.
+    private static void getClassifications(Face face) {
+        if (isInRange(face.getIsSmilingProbability())) {
+            Log.d(LOG_TAG, "Smiling probability " + face.getIsSmilingProbability());
+        }
+
+        if (isInRange(face.getIsLeftEyeOpenProbability())) {
+            Log.d(LOG_TAG, "Left eye open probability " + face.getIsLeftEyeOpenProbability());
+        }
+
+        if (isInRange(face.getIsRightEyeOpenProbability())) {
+            Log.d(LOG_TAG, "Right eye open probability " + face.getIsRightEyeOpenProbability());
+        }
+    }
+
 }
